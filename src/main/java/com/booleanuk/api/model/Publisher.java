@@ -6,8 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
-@NoArgsConstructor
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 
@@ -18,9 +19,18 @@ public class Publisher {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "name")
+    public Publisher(String name, String location){
+        this.name = name;
+        this.location = location;
+        this.publishedBooks = new ArrayList<>();
+    }
+
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "location")
+    @Column(name = "location", nullable = false)
     private String location;
+
+    @OneToMany(mappedBy = "publisher", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Book> publishedBooks;
 }

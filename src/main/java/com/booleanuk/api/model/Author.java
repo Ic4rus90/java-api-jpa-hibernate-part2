@@ -1,13 +1,12 @@
 package com.booleanuk.api.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
-@NoArgsConstructor
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 
@@ -18,15 +17,26 @@ public class Author {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "first_name")
+    public Author(String firstName, String lastName, String email, boolean alive) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.alive = alive;
+        this.bibliography = new ArrayList<>();
+    }
+
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "alive")
+    @Column(name = "alive", nullable = false)
     private boolean alive;
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Book> bibliography;
 }
